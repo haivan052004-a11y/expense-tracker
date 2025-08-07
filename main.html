@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng Dụng Quản Lý Chi Tiêu</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, remove, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+
+        // Cấu hình Firebase của bạn
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0K-i3r8eeCS2zgFY-NcbsRQvo21Wx9zw",
+            authDomain: "qltt-d1d49.firebaseapp.com",
+            projectId: "qltt-d1d49",
+            storageBucket: "qltt-d1d49.firebasestorage.app",
+            messagingSenderId: "14226516269",
+            appId: "1:14226516269:web:033fc8be2a2d3e8903cba4",
+            measurementId: "G-CDBLH4VSD5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app); 
+        
+        // Khởi tạo Realtime Database và gán vào window
+        window.database = getDatabase(app);
+        window.expensesRef = ref(window.database, 'expenses');
+        window.budgetRef = ref(window.database, 'budget');
+        window.onValue = onValue;
+        window.push = push;
+        window.remove = remove;
+        window.set = set;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 Quản Lý Chi Tiêu Cá Nhân</h1>
+        </header>
+
+        <section class="budget-section">
+            <h2>Đặt Ngân Sách</h2>
+            <form id="budgetForm">
+                <input type="number" id="budgetInput" placeholder="Nhập ngân sách (VND)" required>
+                <button type="submit">Đặt Ngân Sách</button>
+            </form>
+        </section>
+
+        <section class="expense-form-section">
+            <h2>Thêm Khoản Chi Mới</h2>
+            <form id="expenseForm">
+                <input type="date" id="dateInput" required>
+                <input type="text" id="categoryInput" placeholder="Danh mục (vd: Ăn uống)" required>
+                <input type="number" id="amountInput" placeholder="Số tiền (VND)" required>
+                <textarea id="noteInput" placeholder="Ghi chú"></textarea>
+                <button type="submit" id="addButton">➕ Thêm</button>
+            </form>
+        </section>
+
+        <section class="summary-section">
+            <h2>Tổng Quan</h2>
+            <div class="summary-box">
+                <p>Ngân sách: <span id="budgetDisplay">0 VND</span></p>
+                <p>Tổng chi tiêu: <span id="totalSpent">0 VND</span></p>
+                <p id="budgetWarning" class="warning-text"></p>
+            </div>
+        </section>
+        
+        <section class="stats-section">
+            <h2>Thống Kê Chi Tiêu</h2>
+            <canvas id="categoryChart"></canvas>
+        </section>
+
+        <section class="expense-list-section">
+            <h2>Danh Sách Chi Tiêu</h2>
+            <table id="expenseTable">
+                <thead>
+                    <tr>
+                        <th>Ngày</th>
+                        <th>Danh mục</th>
+                        <th>Số tiền (VND)</th>
+                        <th>Ghi chú</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
