@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
     const expenseForm = document.getElementById('expenseForm');
     const expenseTableBody = document.querySelector('#expenseTable tbody');
@@ -14,15 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let budget = 0;
     let categoryChart;
 
+    // Lấy các đối tượng Firebase đã khởi tạo từ window
     const database = window.database;
-    const expensesRef = window.expensesRef;
-    const budgetRef = window.budgetRef;
+    const ref = window.ref;
     const onValue = window.onValue;
     const push = window.push;
     const remove = window.remove;
     const set = window.set;
 
     // Lắng nghe thay đổi dữ liệu từ Realtime Database
+    const expensesRef = ref(database, 'expenses');
     onValue(expensesRef, (snapshot) => {
         expenses = [];
         if (snapshot.exists()) {
@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderApp();
     });
 
+    const budgetRef = ref(database, 'budget');
     onValue(budgetRef, (snapshot) => {
         if (snapshot.exists()) {
             budget = snapshot.val().amount || 0;
