@@ -151,7 +151,6 @@ h2 {
     background-color: #c82333;
 }
 
-/* Ẩn bảng nếu không có chi tiêu */
 #expenseTable.hidden {
     display: none;
 }
